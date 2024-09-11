@@ -9,30 +9,43 @@ from decision_tree import DecisionTree
 from random_forest import RandomForest
 
 
-""" Count unique values in y and return the proportions of each class sorted by label in ascending order.
+def count(y: np.ndarray) -> np.ndarray:
+    """
+    Count unique values in y and return the proportions of each class sorted by label in ascending order.
     Example:
         count(np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2])) -> np.array([0.2, 0.3, 0.4, 0.1])
     """
 
-y = np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2])
+    counts  = np.bincount(y)
 
-x = np.bincount(y)
+    proportions = counts / counts.sum()
 
-# # x, kuk = np.unique(y, return_counts=True)
-# list = []
-# for el in kuk:
-#     senip = el/len(y)
-#     list.append(senip)
+    return proportions
+
+
+# x = count(np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2]))
+
+# print(x)
+
+# print(type(x))
+
+
+def gini_index(y: np.ndarray) -> float:
+    """
+    Return the Gini Index of a given NumPy array y.
+    The forumla for the Gini Index is 1 - sum(probs^2), where probs are the proportions of each class in y.
+    Example:
+        gini_index(np.array([1, 1, 2, 2, 3, 3, 4, 4])) -> 0.75
+    """
+    
+    gini = 1 - np.sum(count(y)**2)
+
+    return gini
+
+
+x = gini_index(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
 
 print(x)
-
-
-x = x / x.sum()
-
-print(np.array(listen))
-
-
-
 
 
 

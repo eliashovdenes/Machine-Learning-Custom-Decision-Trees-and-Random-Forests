@@ -13,10 +13,11 @@ def count(y: np.ndarray) -> np.ndarray:
     Example:
         count(np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2])) -> np.array([0.2, 0.3, 0.4, 0.1])
     """
-
     counts  = np.bincount(y)
 
-    proportions = counts / counts.sum()
+    sum = counts.sum()
+
+    proportions = counts / sum
 
     return proportions
 
@@ -28,9 +29,10 @@ def gini_index(y: np.ndarray) -> float:
     Example:
         gini_index(np.array([1, 1, 2, 2, 3, 3, 4, 4])) -> 0.75
     """
-    raise NotImplementedError(
-        "Implement this function"
-    )  # Remove this line when you implement the function
+
+    gini = 1 - np.sum(count(y)**2)
+
+    return gini
 
 
 def entropy(y: np.ndarray) -> float:
