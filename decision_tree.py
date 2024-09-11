@@ -77,6 +77,17 @@ def most_common(y: np.ndarray) -> int:
     return value[highest_count_index]
 
 
+
+def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
+    child1weight = child1.sum()/parent.sum()
+
+    child2weight = child2.sum()/parent.sum()
+
+    info_gain = entropy(parent) - child1weight * entropy(child1) - child2weight * entropy(child2)
+    return info_gain
+
+
+
 class Node:
     """
     A class to represent a node in a decision tree.

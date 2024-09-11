@@ -57,7 +57,7 @@ def entropy(y: np.ndarray) -> float:
     """
     proportions = count(y)
 
-    print(proportions)
+    
 
     entropy = 0
     for el in proportions:
@@ -111,9 +111,29 @@ def most_common(y: np.ndarray) -> int:
 
 
 
-x = most_common(np.array([1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4]))
+# x = most_common(np.array([1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4]))
 
-print(x)
+# print(x)
 
 
+
+def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
+    child1weight = child1.sum()/parent.sum()
+
+    child2weight = child2.sum()/parent.sum()
+
+    info_gain = entropy(parent) - child1weight * entropy(child1) - child2weight * entropy(child2)
+    return info_gain
+
+
+
+# parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
+# child1 = np.array([1,1,1,1,1,1,1,1,1,1])
+
+# child2 = np.array([0,0,0,0,0,0,0,0,0,0])
+
+
+# x = information_gain(parent, child1, child2)
+
+# print(x)
 
