@@ -293,7 +293,7 @@ if __name__ == "__main__":
     )
 
     # Expect the training accuracy to be 1.0 when max_depth=None
-    rf = DecisionTree(max_depth=None, criterion="gini")
+    rf = DecisionTree(max_depth=2, criterion="gini")
     rf.fit(X_train, y_train)
 
     root = rf.fit(X_train, y_train)
