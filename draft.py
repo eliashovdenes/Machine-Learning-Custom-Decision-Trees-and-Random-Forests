@@ -67,17 +67,33 @@ def entropy(y: np.ndarray) -> float:
     return entropy
 
 
-x = entropy(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
+# x = entropy(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
 
-print(x)
+# print(x)
 
-y = entropy(np.array([2, 2, 3, 3]))
 
-print(y)
 
-z = entropy(np.array([3, 3, 3, 3]))
+def split(x: np.ndarray, value: float) -> np.ndarray:
+    """
+    Return a boolean mask for the elements of x satisfying x <= value.
+    Example:
+        split(np.array([1, 2, 3, 4, 5, 2]), 3) -> np.array([True, True, True, False, False, True])
+    """
 
-print(z)
+    boolMask = []
+
+    for el in x:
+        if el <= value:
+            boolMask.append(True)
+        else:
+            boolMask.append(False)
+
+    return boolMask
+
+
+# x = split(np.array([1, 2, 3, 4, 5, 2]), 5)
+
+# print(x)
 
 
 

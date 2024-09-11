@@ -53,9 +53,15 @@ def split(x: np.ndarray, value: float) -> np.ndarray:
     Example:
         split(np.array([1, 2, 3, 4, 5, 2]), 3) -> np.array([True, True, True, False, False, True])
     """
-    raise NotImplementedError(
-        "Implement this function"
-    )  # Remove this line when you implement the function
+    boolMask = []
+
+    for el in x:
+        if el <= value:
+            boolMask.append(True)
+        else:
+            boolMask.append(False)
+
+    return boolMask
 
 
 def most_common(y: np.ndarray) -> int:
