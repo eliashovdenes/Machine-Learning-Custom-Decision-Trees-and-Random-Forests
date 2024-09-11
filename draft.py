@@ -118,22 +118,21 @@ def most_common(y: np.ndarray) -> int:
 
 
 def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
-    child1weight = child1.sum()/parent.sum()
-
-    child2weight = child2.sum()/parent.sum()
+    child1weight = len(child1) / len(parent)
+    child2weight = len(child2) / len(parent)
 
     info_gain = entropy(parent) - child1weight * entropy(child1) - child2weight * entropy(child2)
     return info_gain
 
 
 
-# parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
-# child1 = np.array([1,1,1,1,1,1,1,1,1,1])
+parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
+child1 = np.array([1,1,1,1])
 
-# child2 = np.array([0,0,0,0,0,0,0,0,0,0])
+child2 = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1])
 
 
-# x = information_gain(parent, child1, child2)
+x = information_gain(parent, child1, child2)
 
-# print(x)
+print(x)
 
