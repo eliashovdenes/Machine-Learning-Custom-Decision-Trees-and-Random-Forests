@@ -80,18 +80,12 @@ def split(x: np.ndarray, value: float) -> np.ndarray:
         split(np.array([1, 2, 3, 4, 5, 2]), 3) -> np.array([True, True, True, False, False, True])
     """
 
-    boolMask = []
+    
 
-    for el in x:
-        if el <= value:
-            boolMask.append(True)
-        else:
-            boolMask.append(False)
-
-    return boolMask
+    return x <= value
 
 
-# x = split(np.array([1, 2, 3, 4, 5, 2]), 5)
+# x = split(np.array([1, 2, 3, 4, 5, 2]), 3)
 
 # print(x)
 
@@ -126,13 +120,13 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray)
 
 
 
-parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
-child1 = np.array([1,1,1,1])
+# parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
+# child1 = np.array([1,1,1,1])
 
-child2 = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1])
+# child2 = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1])
 
 
-x = information_gain(parent, child1, child2)
+# x = information_gain(parent, child1, child2)
 
-print(x)
+# print(x)
 
