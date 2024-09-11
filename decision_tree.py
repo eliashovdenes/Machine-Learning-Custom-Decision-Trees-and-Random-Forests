@@ -70,9 +70,11 @@ def most_common(y: np.ndarray) -> int:
     Example:
         most_common(np.array([1, 2, 2, 3, 3, 3, 4, 4, 4, 4])) -> 4
     """
-    raise NotImplementedError(
-        "Implement this function"
-    )  # Remove this line when you implement the function
+    value, counts = np.unique(y, return_counts=True)
+
+    highest_count_index = np.argmax(counts) # Will return the first highest
+
+    return value[highest_count_index]
 
 
 class Node:

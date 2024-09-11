@@ -95,5 +95,25 @@ def split(x: np.ndarray, value: float) -> np.ndarray:
 
 # print(x)
 
+def most_common(y: np.ndarray) -> int:
+    """
+    Return the most common element in y.
+    Example:
+        most_common(np.array([1, 2, 2, 3, 3, 3, 4, 4, 4, 4])) -> 4
+    """
+
+    value, counts = np.unique(y, return_counts=True)
+
+    highest_count_index = np.argmax(counts) # Will return the first highest
+
+    return value[highest_count_index]
+
+
+
+
+x = most_common(np.array([1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4]))
+
+print(x)
+
 
 
