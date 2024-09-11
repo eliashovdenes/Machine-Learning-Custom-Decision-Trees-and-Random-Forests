@@ -70,16 +70,40 @@ def most_common(y: np.ndarray) -> int:
 
 
 
-def information_gain_entropy(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
+def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray, criterion: str) -> float:
+
     child1weight = len(child1) / len(parent)
     child2weight = len(child2) / len(parent)
 
-    info_gain = entropy(parent) - child1weight * entropy(child1) - child2weight * entropy(child2)
+    ## Calculate the impurity of the parent node
+    if criterion == "gini":
+        parent_impurity = gini_index(parent)
+        child1_impurity = gini_index(child1)
+        child2_impurity = gini_index(child2)
+    elif criterion == "entropy":
+        parent_impurity = entropy(parent)
+        child1_impurity = entropy(child1)
+        child2_impurity = entropy(child2)
+
+    else:
+        print("Criterion not set correctly:", criterion)
+
+    
+
+    # Information gain: impurity reduction
+    info_gain = parent_impurity - (child1weight * child1_impurity + child2weight * child2_impurity)
+
+
     return info_gain
 
+    
+
+    
 
 
-def find_best_split_mean(X: np.array,y: np.array):
+
+
+def find_best_split_mean(X: np.array,y: np.array, criterion: str):
 
     best_gain = -1
     best_feature = None
@@ -96,7 +120,7 @@ def find_best_split_mean(X: np.array,y: np.array):
             continue
 
 
-        gain = information_gain_entropy(y, y[left_mask], y[right_mask])
+        gain = information_gain(y, y[left_mask], y[right_mask], criterion)
 
         if gain > best_gain:
             best_gain = gain
@@ -191,8 +215,7 @@ class DecisionTree:
         if depth == 0:
             self.root = self.fit(X, y, depth = 1)
             return self.root
-
-
+        
         
         # If all the labels are the same, return a pure  leaf node
         if len(np.unique(y)) == 1:
@@ -205,7 +228,7 @@ class DecisionTree:
         
 
 
-        best_feature, best_threshold = find_best_split_mean(X,y)
+        best_feature, best_threshold = find_best_split_mean(X,y, self.criterion)
 
         # If it can't find a split return a leaf node with the most common label
         if best_feature == None:
@@ -270,11 +293,11 @@ if __name__ == "__main__":
     )
 
     # Expect the training accuracy to be 1.0 when max_depth=None
-    rf = DecisionTree(max_depth=None, criterion="entropy")
+    rf = DecisionTree(max_depth=None, criterion="gini")
     rf.fit(X_train, y_train)
 
-    # root = rf.fit(X_train, y_train)
-    # print_tree(root)
+    root = rf.fit(X_train, y_train)
+    print_tree(root)
 
     
 

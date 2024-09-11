@@ -120,15 +120,15 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray)
 
 
 
-# parent = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1])
-# child1 = np.array([1,1,1,1])
+parent = np.array([1,1,1,1])
+child1 = np.array([1,1,1])
 
-# child2 = np.array([0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1])
+child2 = np.array([1,1,1,1])
 
 
-# x = information_gain(parent, child1, child2)
+x = information_gain(parent, child1, child2)
 
-# print(x)
+print(x)
 
 
 
@@ -145,7 +145,7 @@ for feature in range(X.shape[1]):
         threshold = np.mean(X[:, feature])
         # print(X[:,feature])
 
-        print(threshold)
+        # print(threshold)
 
 
 
@@ -154,8 +154,8 @@ for feature in range(X.shape[1]):
         right_mask = ~left_mask
 
 
-        print(left_mask)
-        print(right_mask)
+        # print(left_mask)
+        # print(right_mask)
 
         # print(type(left_mask[0]))
 
