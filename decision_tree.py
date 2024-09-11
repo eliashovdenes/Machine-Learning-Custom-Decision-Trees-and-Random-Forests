@@ -106,6 +106,21 @@ def find_best_split_mean(X: np.array,y: np.array):
     return best_feature, best_threshold
 
 
+def print_tree(node, level=0):
+    # If the node is a leaf node, print the predicted value (class)
+    if node.is_leaf():
+        print("  " * level + f"Leaf: Predict {node.value}")
+    else:
+        # If it's an internal node, print the feature and threshold used for the split
+        print("  " * level + f"Node: Feature {node.feature} <= {node.threshold}")
+        # Recursively print the left and right subtrees
+        if node.left:
+            print_tree(node.left, level + 1)
+        if node.right:
+            print_tree(node.right, level + 1)
+
+
+
 
 class Node:
     """
@@ -135,6 +150,24 @@ class Node:
     
 
 
+
+def predict_recursive(currentNode: Node, X: np.ndarray) -> int:
+
+    if currentNode.is_leaf():
+        return currentNode.value
+    
+
+    feature = currentNode.feature
+
+    threshold = currentNode.threshold
+
+    if X[feature] <= threshold:
+        return predict_recursive(currentNode.left, X)
+    else:
+        return predict_recursive(currentNode.right, X)
+    
+
+
 class DecisionTree:
     def __init__(
         self,
@@ -154,6 +187,13 @@ class DecisionTree:
         """
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
+
+        if depth == 0:
+            self.root = self.fit(X, y, depth = 1)
+            return self.root
+
+
+        
         # If all the labels are the same, return a pure  leaf node
         if len(np.unique(y)) == 1:
             return Node(value= y[0]) #return a pure leaf node 
@@ -180,18 +220,37 @@ class DecisionTree:
         right_subtree = self.fit(X[right_mask], y[right_mask], depth +1)
 
 
-        return Node(feature=best_feature, threshold=best_feature, left=left_subtree, right=right_subtree)
+        # if depth == 
+        return Node(feature=best_feature, threshold=best_threshold, left=left_subtree, right=right_subtree)
     
-
+    
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Given a NumPy array X of features, return a NumPy array of predicted integer labels.
         """
-        for el in X:
-            self.root
 
-        ...
+        if self.root.is_leaf() :
+            print("tree cannot only be on node!!!!!!!")
+
+        threshold = self.root.threshold
+
+        feature = self.root.feature
+
+        list_of_predicts = []
+
+        for el in X:
+            xfeatureval = el[feature]
+
+            if xfeatureval <= threshold:
+                list_of_predicts.append(predict_recursive(self.root.left, el))
+
+            else:
+                list_of_predicts.append(predict_recursive(self.root.right, el))
+
+
+        return np.array(list_of_predicts)
+            
 
 if __name__ == "__main__":
     # Test the DecisionTree class on a synthetic dataset
@@ -213,6 +272,11 @@ if __name__ == "__main__":
     # Expect the training accuracy to be 1.0 when max_depth=None
     rf = DecisionTree(max_depth=None, criterion="entropy")
     rf.fit(X_train, y_train)
+
+    # root = rf.fit(X_train, y_train)
+    # print_tree(root)
+
+    
 
     print(f"Training accuracy: {accuracy_score(y_train, rf.predict(X_train))}")
     print(f"Validation accuracy: {accuracy_score(y_val, rf.predict(X_val))}")
