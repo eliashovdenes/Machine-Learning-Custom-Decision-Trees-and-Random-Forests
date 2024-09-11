@@ -16,18 +16,20 @@ def count(y: np.ndarray) -> np.ndarray:
         count(np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2])) -> np.array([0.2, 0.3, 0.4, 0.1])
     """
 
-    counts  = np.bincount(y)
+    _, counts = np.unique(y, return_counts=True)
 
     proportions = counts / counts.sum()
 
     return proportions
 
 
-# x = count(np.array([3, 0, 0, 1, 1, 1, 2, 2, 2, 2]))
+# x = count(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
 
 # print(x)
 
-# print(type(x))
+
+
+
 
 
 def gini_index(y: np.ndarray) -> float:
@@ -43,9 +45,39 @@ def gini_index(y: np.ndarray) -> float:
     return gini
 
 
-x = gini_index(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
+# x = gini_index(np.array([1, 1, 2, 2, 3, 3, 4, 4, 0]))
+
+# print(x)
+
+
+
+def entropy(y: np.ndarray) -> float:
+    """
+    Return the entropy of a given NumPy array y.
+    """
+    proportions = count(y)
+
+    print(proportions)
+
+    entropy = 0
+    for el in proportions:
+        if el != 0:
+            entropy += -el * np.log2(el)
+
+    return entropy
+
+
+x = entropy(np.array([1, 1, 2, 2, 3, 3, 4, 4]))
 
 print(x)
+
+y = entropy(np.array([2, 2, 3, 3]))
+
+print(y)
+
+z = entropy(np.array([3, 3, 3, 3]))
+
+print(z)
 
 
 
