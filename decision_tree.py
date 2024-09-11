@@ -70,12 +70,40 @@ def most_common(y: np.ndarray) -> int:
 
 
 
-def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
+def information_gain_entropy(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray) -> float:
     child1weight = len(child1) / len(parent)
     child2weight = len(child2) / len(parent)
 
     info_gain = entropy(parent) - child1weight * entropy(child1) - child2weight * entropy(child2)
     return info_gain
+
+
+
+def find_best_split_mean(X: np.array,y: np.array):
+
+    best_gain = -1
+    best_feature = None
+    best_threshold = None
+
+    for feature in range(X.shape[1]):
+        threshold = np.mean(X[:, feature])
+
+
+        left_mask = split(X[:, feature], threshold)
+        right_mask = ~left_mask
+
+        if len(y[left_mask]) == 0 or len(y[right_mask]) == 0:
+            continue
+
+
+        gain = information_gain_entropy(y, y[left_mask], y[right_mask])
+
+        if gain > best_gain:
+            best_gain = gain
+            best_feature = feature
+            best_threshold = threshold
+
+    return best_feature, best_threshold
 
 
 
@@ -104,6 +132,7 @@ class Node:
     def is_leaf(self) -> bool:
         # Return True iff the node is a leaf node
         return self.value is not None
+    
 
 
 class DecisionTree:
@@ -120,22 +149,49 @@ class DecisionTree:
         self,
         X: np.ndarray,
         y: np.ndarray,
+        depth=0,
     ):
         """
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
-        raise NotImplementedError(
-            "Implement this function"
-        )  # Remove this line when you implement the function
+        # If all the labels are the same, return a pure  leaf node
+        if len(np.unique(y)) == 1:
+            return Node(value= y[0]) #return a pure leaf node 
+        
+
+        # If max depth is not none and the current depth is equal or more than max depth return a leaf node with the most common label
+        if self.max_depth is not None and depth >= self.max_depth:
+            return Node(value = most_common(y))
+        
+
+
+        best_feature, best_threshold = find_best_split_mean(X,y)
+
+        # If it can't find a split return a leaf node with the most common label
+        if best_feature == None:
+            return Node(value = most_common(y))
+        
+
+
+        left_mask = split(X[:, best_feature], best_threshold)
+        right_mask = ~left_mask
+
+        left_subtree = self.fit(X[left_mask], y[left_mask], depth +1)
+        right_subtree = self.fit(X[right_mask], y[right_mask], depth +1)
+
+
+        return Node(feature=best_feature, threshold=best_feature, left=left_subtree, right=right_subtree)
+    
+
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Given a NumPy array X of features, return a NumPy array of predicted integer labels.
         """
-        raise NotImplementedError(
-            "Implement this function"
-        )  # Remove this line when you implement the function
+        for el in X:
+            self.root
 
+        ...
 
 if __name__ == "__main__":
     # Test the DecisionTree class on a synthetic dataset
