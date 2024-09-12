@@ -39,10 +39,27 @@ class RandomForest:
      
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        raise NotImplementedError(
-            "Implement this function"
-        )  # Remove this line when you implement the function
+        
 
+        list_of_predicts = []
+        for index in range(len(self.trees)):
+            predict = self.trees[index].predict(X)
+            list_of_predicts.append(predict)
+
+        list_of_predicts = np.array(list_of_predicts)
+
+        # compare every prediction
+
+        prediction = []
+
+        for index in range(len(X)):
+            labels = list_of_predicts[:, index]
+
+            most_common_element = np.bincount(labels).argmax()
+            prediction.append(most_common_element)
+        
+
+        return prediction
 
 if __name__ == "__main__":
     # Test the RandomForest class on a synthetic dataset
