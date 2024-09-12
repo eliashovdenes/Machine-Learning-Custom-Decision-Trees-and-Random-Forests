@@ -128,7 +128,7 @@ child2 = np.array([1,1,1,1])
 
 x = information_gain(parent, child1, child2)
 
-print(x)
+# print(x)
 
 
 
@@ -161,5 +161,17 @@ for feature in range(X.shape[1]):
 
 
 
+X = np.array([[1,1,1,2],[2,2,3,3]])
 
 
+if True:
+    # Calculate n as the square root of the number of features
+    n = int(np.sqrt(X.shape[1]))  # Get the number of features to select
+
+    # Randomly select n indices from the range of available features (0 to X.shape[1] - 1)
+    selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
+
+    print("Selected", selected_features)
+
+
+print(np.arange(X.shape[1]))

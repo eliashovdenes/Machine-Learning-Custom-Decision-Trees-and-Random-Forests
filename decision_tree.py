@@ -103,13 +103,33 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
 
 
 
-def find_best_split_mean(X: np.array,y: np.array, criterion: str):
+def find_best_split_mean(X: np.array,y: np.array, self):
 
     best_gain = -1
     best_feature = None
     best_threshold = None
+    selected_features = None
 
-    for feature in range(X.shape[1]):
+    if self.max_features is None:
+        selected_features = np.arange(X.shape[1])
+
+    elif self.max_features == "sqrt":
+        n = int(np.sqrt(X.shape[1])) 
+
+        selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
+
+    elif self.max_features == "log2":
+        n = int(np.log2(X.shape[1])) 
+
+        selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
+    else:
+        raise ValueError("Invalid value for max_features")
+
+
+    # if selected_features == []:
+    #     print("selected features not set correctly: ", selected_features )
+    
+    for feature in selected_features:
         threshold = np.mean(X[:, feature])
 
 
@@ -120,7 +140,7 @@ def find_best_split_mean(X: np.array,y: np.array, criterion: str):
             continue
 
 
-        gain = information_gain(y, y[left_mask], y[right_mask], criterion)
+        gain = information_gain(y, y[left_mask], y[right_mask], self.criterion)
 
         if gain > best_gain:
             best_gain = gain
@@ -197,10 +217,13 @@ class DecisionTree:
         self,
         max_depth: int | None = None,
         criterion: str = "entropy",
+        max_features: str | None = None,
     ) -> None:
         self.root = None
         self.criterion = criterion
         self.max_depth = max_depth
+        self.max_features = max_features
+        
 
     def fit(
         self,
@@ -212,6 +235,7 @@ class DecisionTree:
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
 
+        
         if depth == 0:
             self.root = self.fit(X, y, depth = 1)
             return self.root
@@ -228,7 +252,7 @@ class DecisionTree:
         
 
 
-        best_feature, best_threshold = find_best_split_mean(X,y, self.criterion)
+        best_feature, best_threshold = find_best_split_mean(X,y, self)
 
         # If it can't find a split return a leaf node with the most common label
         if best_feature == None:
@@ -293,11 +317,10 @@ if __name__ == "__main__":
     )
 
     # Expect the training accuracy to be 1.0 when max_depth=None
-    rf = DecisionTree(max_depth=2, criterion="gini")
+    rf = DecisionTree(max_depth=None, criterion="entropy", max_features="log2")
     rf.fit(X_train, y_train)
 
-    root = rf.fit(X_train, y_train)
-    print_tree(root)
+    print_tree(rf.root)
 
     
 
