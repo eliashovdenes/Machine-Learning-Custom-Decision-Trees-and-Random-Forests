@@ -1,5 +1,7 @@
 import numpy as np
 
+from decision_tree import DecisionTree
+
 
 class RandomForest:
     def __init__(
@@ -13,11 +15,28 @@ class RandomForest:
         self.max_depth = max_depth
         self.criterion = criterion
         self.max_features = max_features
+        self.trees = []
 
     def fit(self, X: np.ndarray, y: np.ndarray):
-        raise NotImplementedError(
-            "Implement this function"
-        )  # Remove this line when you implement the function
+
+        trees = self.n_estimators   
+
+        n = len(X)
+
+        X_indexes = np.random.choice(np.arange(n), size=n, replace=True)
+
+        X_sampled = X[X_indexes]
+
+        y_sampled = y[X_indexes]
+
+   
+        for _ in range(trees):
+            rf = DecisionTree(max_depth=self.max_depth, criterion= self.criterion, max_features=self.max_features)
+            rf.fit(X_sampled, y_sampled)
+            self.trees.append(rf)
+
+
+     
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         raise NotImplementedError(
@@ -46,6 +65,8 @@ if __name__ == "__main__":
         n_estimators=20, max_depth=5, criterion="entropy", max_features="sqrt"
     )
     rf.fit(X_train, y_train)
+
+    
 
     print(f"Training accuracy: {accuracy_score(y_train, rf.predict(X_train))}")
     print(f"Validation accuracy: {accuracy_score(y_val, rf.predict(X_val))}")

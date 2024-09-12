@@ -165,7 +165,6 @@ def print_tree(node, level=0):
 
 
 
-
 class Node:
     """
     A class to represent a node in a decision tree.
@@ -270,6 +269,9 @@ class DecisionTree:
         # if depth == 
         return Node(feature=best_feature, threshold=best_threshold, left=left_subtree, right=right_subtree)
     
+
+    
+    
     
 
     def predict(self, X: np.ndarray) -> np.ndarray:
@@ -317,7 +319,7 @@ if __name__ == "__main__":
     )
 
     # Expect the training accuracy to be 1.0 when max_depth=None
-    rf = DecisionTree(max_depth=None, criterion="entropy", max_features="log2")
+    rf = DecisionTree(max_depth=None, criterion="entropy", max_features="sqrt")
     rf.fit(X_train, y_train)
 
     print_tree(rf.root)
