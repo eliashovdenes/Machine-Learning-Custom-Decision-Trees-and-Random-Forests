@@ -10,14 +10,18 @@ class RandomForest:
         max_depth: None | int = 5,
         criterion: str = "entropy",
         max_features: None | str = "sqrt",
+        seed: int = 0
     ) -> None:
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.criterion = criterion
         self.max_features = max_features
         self.trees = []
+        self.seed = seed
 
     def fit(self, X: np.ndarray, y: np.ndarray):
+
+        np.random.seed(self.seed)
 
         trees = self.n_estimators   
 
