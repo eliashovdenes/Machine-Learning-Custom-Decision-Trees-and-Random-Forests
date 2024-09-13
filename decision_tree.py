@@ -222,6 +222,8 @@ class DecisionTree:
         self.criterion = criterion
         self.max_depth = max_depth
         self.max_features = max_features
+        if (max_depth is not None and max_depth <= 1):
+            raise Exception("The tree can not be less then 2 in depth")
         
 
     def fit(
@@ -233,9 +235,8 @@ class DecisionTree:
         """
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
-
         
-        if depth == 0:
+        if depth == 0:            
             self.root = self.fit(X, y, depth = 1)
             return self.root
         
@@ -278,15 +279,16 @@ class DecisionTree:
         """
         Given a NumPy array X of features, return a NumPy array of predicted integer labels.
         """
+        list_of_predicts = []
 
-        if self.root.is_leaf() :
-            print("tree cannot only be on node!!!!!!!")
+        if self.root.is_leaf():
+            list_of_predicts.append(self.root.value)
 
         threshold = self.root.threshold
 
         feature = self.root.feature
 
-        list_of_predicts = []
+    
 
         for el in X:
             xfeatureval = el[feature]
@@ -318,7 +320,7 @@ if __name__ == "__main__":
         X, y, test_size=0.3, random_state=seed, shuffle=True
     )
 
-    # Expect the training accuracy to be 1.0 when max_depth=None
+    
     rf = DecisionTree(max_depth=None, criterion="entropy", max_features="sqrt")
     rf.fit(X_train, y_train)
 

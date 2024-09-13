@@ -7,7 +7,7 @@ class RandomForest:
     def __init__(
         self,
         n_estimators: int = 100,
-        max_depth: int = 5,
+        max_depth: None | int = 5,
         criterion: str = "entropy",
         max_features: None | str = "sqrt",
     ) -> None:
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     )
 
     rf = RandomForest(
-        n_estimators=20, max_depth=5, criterion="entropy", max_features="sqrt"
+        n_estimators=20, max_depth=None, criterion="entropy", max_features="sqrt"
     )
     rf.fit(X_train, y_train)
 
