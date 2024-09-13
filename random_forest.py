@@ -26,15 +26,14 @@ class RandomForest:
         trees = self.n_estimators   
 
         n = len(X)
-
-        X_indexes = np.random.choice(np.arange(n), size=n, replace=True)
-
-        X_sampled = X[X_indexes]
-
-        y_sampled = y[X_indexes]
-
    
         for _ in range(trees):
+
+            X_indexes = np.random.choice(np.arange(n), size=n, replace=True)
+
+            X_sampled = X[X_indexes]
+
+            y_sampled = y[X_indexes]
             rf = DecisionTree(max_depth=self.max_depth, criterion= self.criterion, max_features=self.max_features)
             rf.fit(X_sampled, y_sampled)
             self.trees.append(rf)
