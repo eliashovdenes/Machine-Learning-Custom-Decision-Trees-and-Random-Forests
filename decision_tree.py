@@ -105,6 +105,13 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
 
 def find_best_split_mean(X: np.array,y: np.array, self):
 
+
+
+    seed = self.seed
+
+    np.random.seed(seed)
+
+    
     best_gain = -1
     best_feature = None
     best_threshold = None
@@ -217,11 +224,13 @@ class DecisionTree:
         max_depth: int | None = None,
         criterion: str = "entropy",
         max_features: str | None = None,
+        seed: int = 0
     ) -> None:
         self.root = None
         self.criterion = criterion
         self.max_depth = max_depth
         self.max_features = max_features
+        self.seed = seed
         if (max_depth is not None and max_depth <= 1):
             raise Exception("The tree can not be less then 2 in depth")
         
