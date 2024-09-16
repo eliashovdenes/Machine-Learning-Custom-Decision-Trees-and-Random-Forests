@@ -23,11 +23,11 @@ class RandomForest:
 
         np.random.seed(self.seed)
 
-        trees = self.n_estimators   
+        num_trees = self.n_estimators   
 
         n = len(X)
    
-        for _ in range(trees):
+        for _ in range(num_trees):
 
             X_indexes = np.random.choice(np.arange(n), size=n, replace=True)
 

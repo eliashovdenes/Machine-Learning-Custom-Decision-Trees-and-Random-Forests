@@ -174,7 +174,12 @@ if True:
     print("Selected", selected_features)
 
 
-print(np.arange(X.shape[1]))
+print(np.arange(X.shape[0]))
+
+
+# print(X.shape[0])
+
+
 
 
 
