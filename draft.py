@@ -178,5 +178,5 @@ print(np.arange(X.shape[1]))
 
 
 
-for x in range(20):
-    print(x)
+# for x in range(20):
+#     print(x)
