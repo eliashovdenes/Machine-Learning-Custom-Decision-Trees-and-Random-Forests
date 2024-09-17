@@ -72,8 +72,8 @@ def most_common(y: np.ndarray) -> int:
 
 def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray, criterion: str) -> float:
 
-    child1weight = len(child1) / len(parent)
-    child2weight = len(child2) / len(parent)
+    child1weight = len(child1) / len(parent) #calculate weight of child1
+    child2weight = len(child2) / len(parent) #calculate weight of child2
 
     ## Calculate the impurity of the parent node
     if criterion == "gini":
@@ -90,7 +90,7 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
 
     
 
-    # Information gain: impurity reduction
+    # Calculate the information gain
     info_gain = parent_impurity - (child1weight * child1_impurity + child2weight * child2_impurity)
 
 
@@ -105,26 +105,24 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
 
 def find_best_split_mean(X: np.array,y: np.array, self):
 
+    np.random.seed(self.seed) # Sets the seed as set in the init of decision tree
 
-
-    seed = self.seed
-
-    np.random.seed(seed)
-
-    
     best_gain = -1
     best_feature = None
     best_threshold = None
     selected_features = None
 
+    # Consider all features
     if self.max_features is None:
         selected_features = np.arange(X.shape[1])
 
+    # Consider the square root of features
     elif self.max_features == "sqrt":
         n = int(np.sqrt(X.shape[1])) 
 
         selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
 
+    # Conisider the log2 of features
     elif self.max_features == "log2":
         n = int(np.log2(X.shape[1])) 
 
@@ -132,24 +130,21 @@ def find_best_split_mean(X: np.array,y: np.array, self):
     else:
         raise ValueError("Invalid value for max_features")
 
-
-    # if selected_features == []:
-    #     print("selected features not set correctly: ", selected_features )
-    
+    # Go through the features and find the best split
     for feature in selected_features:
-        threshold = np.mean(X[:, feature])
+        threshold = np.mean(X[:, feature]) # Compute the threshold
 
 
-        left_mask = split(X[:, feature], threshold)
-        right_mask = ~left_mask
+        left_mask = split(X[:, feature], threshold) # Mask with the left part of the split
+        right_mask = ~left_mask # Mask with the right part of the split
 
-        if len(y[left_mask]) == 0 or len(y[right_mask]) == 0:
+        if len(y[left_mask]) == 0 or len(y[right_mask]) == 0: # If the split is invalid continue to try to find a split
             continue
 
 
-        gain = information_gain(y, y[left_mask], y[right_mask], self.criterion)
+        gain = information_gain(y, y[left_mask], y[right_mask], self.criterion) # compute the information gain of the split
 
-        if gain > best_gain:
+        if gain > best_gain: # if the gain is better than default or the previous then choose that split
             best_gain = gain
             best_feature = feature
             best_threshold = threshold
@@ -158,13 +153,10 @@ def find_best_split_mean(X: np.array,y: np.array, self):
 
 
 def print_tree(node, level=0):
-    # If the node is a leaf node, print the predicted value (class)
     if node.is_leaf():
         print("  " * level + f"Leaf: Predict {node.value}")
     else:
-        # If it's an internal node, print the feature and threshold used for the split
         print("  " * level + f"Node: Feature {node.feature} <= {node.threshold}")
-        # Recursively print the left and right subtrees
         if node.left:
             print_tree(node.left, level + 1)
         if node.right:
@@ -204,13 +196,13 @@ class Node:
 def predict_recursive(currentNode: Node, X: np.ndarray) -> int:
 
     if currentNode.is_leaf():
-        return currentNode.value
+        return currentNode.value # If leaf return the value of leaf
     
-
     feature = currentNode.feature
 
     threshold = currentNode.threshold
 
+    # decide to go to left or right node
     if X[feature] <= threshold:
         return predict_recursive(currentNode.left, X)
     else:
@@ -245,6 +237,7 @@ class DecisionTree:
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
         
+        # If the depth is at 0 we will assign the root and continue the creation of the tree
         if depth == 0:            
             self.root = self.fit(X, y, depth = 1)
             return self.root
@@ -260,7 +253,7 @@ class DecisionTree:
             return Node(value = most_common(y))
         
 
-
+        # Return the best feature and the threshold where we split using the find_best_split_mean function
         best_feature, best_threshold = find_best_split_mean(X,y, self)
 
         # If it can't find a split return a leaf node with the most common label
@@ -268,15 +261,17 @@ class DecisionTree:
             return Node(value = most_common(y))
         
 
-
+        # Here we split the X values on the feature we found this will return lists with true and false
         left_mask = split(X[:, best_feature], best_threshold)
-        right_mask = ~left_mask
+        right_mask = ~left_mask  # Opposite list with true and false then above
 
+
+        # Create the two subtrees
         left_subtree = self.fit(X[left_mask], y[left_mask], depth +1)
         right_subtree = self.fit(X[right_mask], y[right_mask], depth +1)
 
 
-        # if depth == 
+        # Keep splitting the values and return the two subtrees as left and right in the node
         return Node(feature=best_feature, threshold=best_threshold, left=left_subtree, right=right_subtree)
     
 
@@ -290,18 +285,15 @@ class DecisionTree:
         """
         list_of_predicts = []
 
-        if self.root.is_leaf():
-            list_of_predicts.append(self.root.value)
-
         threshold = self.root.threshold
 
         feature = self.root.feature
 
-    
+        for el in X: # for each feature 
+            xfeatureval = el[feature] # get the feature value
 
-        for el in X:
-            xfeatureval = el[feature]
 
+            # decide if we are going to the left or right depending on the threshold and the feature value
             if xfeatureval <= threshold:
                 list_of_predicts.append(predict_recursive(self.root.left, el))
 
@@ -330,12 +322,11 @@ if __name__ == "__main__":
     )
 
     
-    rf = DecisionTree(max_depth=None, criterion="entropy", max_features="sqrt")
+    rf = DecisionTree(max_depth=2, criterion="entropy", max_features="sqrt")
     rf.fit(X_train, y_train)
 
     print_tree(rf.root)
 
-    
 
     print(f"Training accuracy: {accuracy_score(y_train, rf.predict(X_train))}")
     print(f"Validation accuracy: {accuracy_score(y_val, rf.predict(X_val))}")
