@@ -75,7 +75,7 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
     child1weight = len(child1) / len(parent) #calculate weight of child1
     child2weight = len(child2) / len(parent) #calculate weight of child2
 
-    ## Calculate the impurity of the parent node
+    ## Calculate the impurity of the parent node and the children
     if criterion == "gini":
         parent_impurity = gini_index(parent)
         child1_impurity = gini_index(child1)
@@ -97,11 +97,6 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
     return info_gain
 
     
-
-    
-
-
-
 
 def find_best_split_mean(X: np.array,y: np.array, self):
 
@@ -187,7 +182,7 @@ class Node:
         self.value = value
 
     def is_leaf(self) -> bool:
-        # Return True iff the node is a leaf node
+        # Return True if the node is a leaf node
         return self.value is not None
     
 
@@ -255,6 +250,7 @@ class DecisionTree:
 
         # Return the best feature and the threshold where we split using the find_best_split_mean function
         best_feature, best_threshold = find_best_split_mean(X,y, self)
+
 
         # If it can't find a split return a leaf node with the most common label
         if best_feature == None:
