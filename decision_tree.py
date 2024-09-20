@@ -100,8 +100,6 @@ def information_gain(parent: np.ndarray, child1: np.ndarray, child2: np.ndarray,
 
 def find_best_split_mean(X: np.array,y: np.array, self):
 
-    np.random.seed(self.seed) # Sets the seed as set in the init of decision tree
-
     best_gain = -1
     best_feature = None
     best_threshold = None
@@ -115,13 +113,13 @@ def find_best_split_mean(X: np.array,y: np.array, self):
     elif self.max_features == "sqrt":
         n = int(np.sqrt(X.shape[1])) 
 
-        selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
+        selected_features = self.rng.choice(np.arange(X.shape[1]), size=n, replace=False)
 
     # Conisider the log2 of features
     elif self.max_features == "log2":
         n = int(np.log2(X.shape[1])) 
 
-        selected_features = np.random.choice(np.arange(X.shape[1]), size=n, replace=False)
+        selected_features = self.rng.choice(np.arange(X.shape[1]), size=n, replace=False)
     else:
         raise ValueError("Invalid value for max_features")
 
@@ -218,6 +216,7 @@ class DecisionTree:
         self.max_depth = max_depth
         self.max_features = max_features
         self.seed = seed
+        self.rng = np.random.default_rng(seed)
         if (max_depth is not None and max_depth <= 1):
             raise Exception("The tree can not be less then 2 in depth")
         
@@ -231,6 +230,8 @@ class DecisionTree:
         """
         This functions learns a decision tree given (continuous) features X and (integer) labels y.
         """
+        np.random.seed(self.seed) # Sets the seed as set in the init of decision tree
+
         
         # If the depth is at 0 we will assign the root and continue the creation of the tree
         if depth == 0:            
