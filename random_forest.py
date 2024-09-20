@@ -22,8 +22,6 @@ class RandomForest:
 
     def fit(self, X: np.ndarray, y: np.ndarray):
 
-        # np.random.seed(self.seed) # set seed
-
         num_trees = self.n_estimators   # num of trees to be created
 
         n = len(X) # how many features we have
@@ -32,7 +30,8 @@ class RandomForest:
 
             np.random.seed(self.seed)
 
-            X_indexes = self.rng.choice(np.arange(n), size=n, replace=True) #choose features at random, where features can occur multiple times
+            X_indexes = self.rng.choice(np.arange(n), size=n, replace=True) #choose observations at random, 
+            # where observations can occur multiple times
 
             X_sampled = X[X_indexes] 
 
@@ -55,8 +54,6 @@ class RandomForest:
 
         list_of_predicts = np.array(list_of_predicts) #convert into np.array
 
-        # print(list_of_predicts)
-
         # compare every prediction
         prediction = []
 
@@ -66,7 +63,6 @@ class RandomForest:
             most_common_element = np.bincount(labels).argmax() # get the most common target for the current feature
             prediction.append(most_common_element) # add this to the list
             
-        
         
         return prediction
 
@@ -88,7 +84,7 @@ if __name__ == "__main__":
     )
 
     rf = RandomForest(
-        n_estimators=20, max_depth=None, criterion="entropy", max_features="sqrt"
+        n_estimators=5, max_depth=None, criterion="entropy", max_features="sqrt"
     )
     rf.fit(X_train, y_train)
 
