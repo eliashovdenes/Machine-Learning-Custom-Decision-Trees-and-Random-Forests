@@ -28,4 +28,4 @@ For more detailed information, please refer to the full PDF report included in t
 
 ## Report
 
-[View the full report (PDF)](README.md)
+[View the full report (PDF)](Report.pdf)
