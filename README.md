@@ -1,5 +1,7 @@
 ## Introduction
-This project implements custom decision tree and random forest classifiers from scratch, comparing them with scikit-learn's implementations. We tested our models on wine and coffee datasets, focusing on classifier performance and hyperparameter tuning.
+This project implements custom decision tree and random forest classifiers from scratch, comparing them with scikit-learn's implementations. We tested our models on wine and coffee datasets, focusing on classifier performance and hyperparameter tuning. 
+
+This was a school project for [Inf264t]((https://www4.uib.no/emner/INF264)) course.
 
 
 ## Report Highlights
