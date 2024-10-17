@@ -24,3 +24,8 @@ Run the run_experiments.ipynb file
 
 Note: Set the seed to 0 to reproduce the exact results mentioned in the report.
 For more detailed information, please refer to the full PDF report included in this repository.
+
+
+## Report
+
+[View the full report (PDF)](README.md)
