@@ -27,3 +27,8 @@ Performance comparisons between custom and scikit-learn implementations
 Analysis of results on both datasets
 
 [View the full report (PDF)](Report.pdf)
+
+## Authors
+* Elias Hovdenes
+* Magnus Brørby
+
